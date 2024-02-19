@@ -1,38 +1,27 @@
+import LoginForm from "../components/LoginForm";
+
 function LoginPage() {
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="w-1/3 border-2 rounded-sm drop-shadow-2xl bg-white p-6">
-        <form className=" flex justify-center flex-col gap-2">
-          <h1 className="text-center text-2xl font-semibold text-black">
-            Ingresá a tu cuenta
-          </h1>
-          <input
-            className="border border-gray-400 rounded-sm p-2 mt-2"
-            type="email"
-            placeholder="Email"
-          />
-          <input
-            className="border border-gray-400 rounded-sm p-2"
-            type="password"
-            placeholder="Contraseña"
-          />
-          <button className="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-2 border border-gray-400 rounded-sm shadow mt-2 mb-2">
-            Ingresar
-          </button>
-        </form>
-        <hr className="mt-2" />
-        <h1 className="flex text-black font-semibold mt-2">
-          ¿No tienes una cuenta?
-          <p
-            className="ml-1 cursor-pointer text-slate-600 hover:text-slate-700"
-            
-          >
-            Regístrate
+    <>
+      <h1 className="absolute mt-4 ml-8 text-3xl font-bold tracking-widest	 text-white font-sans">
+        MisGastos.
+      </h1>
+      <div className="flex justify-center items-center h-screen bg-indigo-700">
+        <div className="w-2/4 h-screen flex flex-col justify-center items-center">
+          <p className="w-11/12 text-left text-2xl text-white font-sans font-semibold tracking-wide	 mb-4">
+          Gestiona tus finanzas con claridad, vive con tranquilidad.
           </p>
-        </h1>
+          <p className="w-11/12 tracking-wide font-light text-left text-xl text-white font-sans">
+            Registra tus gastos en pesos y conviértelos automáticamente al valor
+            del dólar actual. Una herramienta para documentar y gestiona tus
+            gastos de manera sencilla, garantizando una visión precisa de tus
+            finanzas, independientemente de la moneda.
+          </p>
+        </div>
+        <LoginForm />
       </div>
-    </div>
-  );    
+    </>
+  );
 }
 
 export default LoginPage;

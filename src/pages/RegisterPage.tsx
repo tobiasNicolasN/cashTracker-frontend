@@ -1,18 +1,30 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { auth } from "../api/auth.api";
+import { IRegister } from "../interfaces/auth.interface";
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<IRegister>();
+
+  const onSubmit = handleSubmit((values) => {
+    auth
+      .register(values)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  });
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="w-1/3 border-2 rounded-sm drop-shadow-2xl bg-white p-6">
-        <form 
-        className=" flex justify-center flex-col gap-2"
-        onSubmit={handleSubmit((values)=>{
-          console.log(values)
-        })}>
+        <form
+          className=" flex justify-center flex-col gap-2"
+          onSubmit={onSubmit}
+        >
           <h1 className="text-center text-2xl font-semibold text-black">
             Crear una nueva cuenta
           </h1>
