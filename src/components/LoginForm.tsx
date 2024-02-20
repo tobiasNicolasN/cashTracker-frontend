@@ -1,22 +1,25 @@
-import { useNavigate } from "react-router-dom";
-import {useForm} from 'react-hook-form'
+import { useForm } from "react-hook-form";
 import { ILogin } from "../interfaces/auth.interface";
-import {auth} from '../api/auth.api'
+import { useAuth } from "../context/auth.context";
+import { TbEye, TbEyeClosed } from "react-icons/tb";
+import { useState } from "react";
 
-function LoginForm() {
-  const navigate = useNavigate();
+interface ILoginProps{
+  openRegister : () => void
+}
+
+function LoginForm(props: ILoginProps) {
   const { register, handleSubmit } = useForm<ILogin>();
+  const [showPassword, setShowPassword] = useState(false)
+  const {signin} = useAuth()
 
   const onSubmit = handleSubmit((values) => {
-    auth
-      .login(values)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((error) => {
-        console.error(error.response.data);
-      });
+    signin(values)
   });
+
+  const showPassw = () => {
+    setShowPassword(!showPassword)
+  }
 
   return (
     <div className="w-1/3 border-2 border-gray-300 rounded-sm drop-shadow-2xl bg-white p-6">
@@ -29,16 +32,17 @@ function LoginForm() {
           type="email"
           placeholder="Email"
           {...register("email", { required: true })}
-
         />
+        <div className="flex items-center">
         <input
-          className="border border-gray-400 rounded-sm p-2 font-sans"
-          type="password"
+          className="border w-full border-gray-400 rounded-sm p-2 font-sans"
+          type={showPassword ? "text" : "password"}
           placeholder="Contraseña"
           {...register("password", { required: true })}
-
         />
-        <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 border border-gray-400 rounded-sm shadow mt-2 mb-2 font-sans">
+        <h1 onClick={() => showPassw()} className="absolute flex justify-center items-center rounded-full right-10 w-6 h-6 cursor-pointer hover:bg-slate-200">{showPassword === false ? <TbEyeClosed/> : <TbEye/>}</h1>
+        </div>
+        <button className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 border border-gray-400 rounded-sm shadow mt-2 mb-2 font-sans">
           Ingresar
         </button>
       </form>
@@ -47,9 +51,9 @@ function LoginForm() {
         ¿No tienes una cuenta?
         <p
           onClick={() => {
-            navigate("/register");
+            props.openRegister();
           }}
-          className="ml-1 cursor-pointer text-indigo-600 hover:text-indigo-800 font-medium font-sans"
+          className="ml-1 cursor-pointer text-emerald-600 hover:text-emerald-800 font-medium font-sans"
         >
           Regístrate
         </p>
