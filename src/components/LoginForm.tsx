@@ -13,6 +13,7 @@ function LoginForm(props: ILoginProps) {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<ILogin>();
   const [showPassword, setShowPassword] = useState(false);
   const { signin, error: loginErrors, cleanErrors } = useAuth();
@@ -29,7 +30,7 @@ function LoginForm(props: ILoginProps) {
     if (loginErrors.error.length > 0) {
       const timer = setTimeout(() => {
         cleanErrors();
-      }, 3500);
+      }, 7000);
       return () => clearTimeout(timer);
     }
   }, [loginErrors.error]);
@@ -53,33 +54,43 @@ function LoginForm(props: ILoginProps) {
             placeholder="Contraseña"
             {...register("password", { required: true })}
           />
-          <h1
-            onClick={() => showPassw()}
-            className="absolute flex justify-center items-center rounded-full right-8 w-6 h-6 cursor-pointer hover:bg-slate-200"
-          >
-            {showPassword === false ? <TbEyeClosed /> : <TbEye />}
-          </h1>
+          {watch("password") && (
+            <h1
+              onClick={() => showPassw()}
+              className="absolute flex justify-center items-center rounded-full right-8 w-6 h-6 cursor-pointer hover:bg-slate-200"
+            >
+              {showPassword === false ? <TbEyeClosed /> : <TbEye />}
+            </h1>
+          )}
         </div>
         <div>
           <div
             className={
               loginErrors.error.length > 0
-                ? "bg-red-600 w-full h-8 flex items-center"
+                ? "bg-red-600 w-full h-auto flex flex-col items-center"
                 : "hidden"
             }
+            style={{ alignItems: "flex-start" }}
           >
-            <p className="bg-red-600 text-white ml-2">
-              {loginErrors.error.map((error) => error)}
-            </p>
+            {loginErrors.error.map((error: string, index: number) => (
+              <p
+                className="bg-red-600 text-white ml-2 text-left mt-1 mb-1"
+                key={index}
+              >
+                {error}
+              </p>
+            ))}
           </div>
           {errors.email && (
             <div className="bg-red-600 w-full h-8 flex items-center">
-              <p className="bg-red-600 text-white ml-2">Email requerido.</p>
+              <p className="bg-red-600 text-white ml-2 mt-2 mb-2">
+                Email requerido.
+              </p>
             </div>
           )}
           {errors.password && (
             <div className="bg-red-600 w-full h-8 flex items-center">
-              <p className="bg-red-600 text-white ml-2">
+              <p className="bg-red-600 text-white ml-2 mt-2 mb-2">
                 Contraseña requerida.
               </p>
             </div>

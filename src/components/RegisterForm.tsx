@@ -34,7 +34,7 @@ function RegisterForm(props: IRegisterProps) {
     if (registerErrors.error.length > 0) {
       const timer = setTimeout(() => {
         cleanErrors();
-      }, 3500);
+      }, 7000);
       return () => clearTimeout(timer);
     }
   }, [registerErrors.error]);
@@ -53,7 +53,7 @@ function RegisterForm(props: IRegisterProps) {
         />
         <input
           className="border border-gray-400 rounded-sm p-2"
-          type="email"
+          type="text"
           placeholder="Correo electrónico"
           {...register("email", { required: true })}
         />
@@ -64,12 +64,14 @@ function RegisterForm(props: IRegisterProps) {
             placeholder="Contraseña"
             {...register("password", { required: true })}
           />
-          <h1
-            onClick={() => showPassw()}
-            className="absolute flex justify-center items-center rounded-full right-8 w-6 h-6 cursor-pointer hover:bg-slate-200"
-          >
-            {showPassword === false ? <TbEyeClosed /> : <TbEye />}
-          </h1>
+          {watch("password") && (
+            <h1
+              onClick={() => showPassw()}
+              className="absolute flex justify-center items-center rounded-full right-8 w-6 h-6 cursor-pointer hover:bg-slate-200"
+            >
+              {showPassword === false ? <TbEyeClosed /> : <TbEye />}
+            </h1>
+          )}
         </div>
         <input
           className="border w-full border-gray-400 rounded-sm p-2 font-sans"
@@ -84,39 +86,45 @@ function RegisterForm(props: IRegisterProps) {
         <div
           className={
             registerErrors.error.length > 0
-              ? "bg-red-600 w-full h-8 flex items-center"
+              ? "bg-red-600 w-full h-auto flex flex-col items-center"
               : "hidden"
           }
+          style={{ alignItems: "flex-start" }}
         >
-          <p className="bg-red-600 text-white ml-2">
-            {registerErrors.error.map((error) => error)}
-          </p>
+          {registerErrors.error.map((error: string, index: number) => (
+            <p
+              className="bg-red-600 text-white ml-2 text-left mt-1 mb-1"
+              key={index}
+            >
+              {error}
+            </p>
+          ))}
         </div>
         <div>
           {errors.username && (
-            <div className="bg-red-600 w-full h-8 flex items-center">
-              <p className="bg-red-600 text-white ml-2">
+            <div className="bg-red-600 w-full h-auto flex items-center">
+              <p className="bg-red-600 text-white ml-2 mt-1 mb-1">
                 Nombre de usuario requerido.
               </p>
             </div>
           )}
           {errors.email && (
-            <div className="bg-red-600 w-full h-8 flex items-center">
-              <p className="bg-red-600 text-white ml-2">
+            <div className="bg-red-600 w-full h-auto flex items-center">
+              <p className="bg-red-600 text-white ml-2 mt-2 mb-2">
                 Correo electrónico requerido.
               </p>
             </div>
           )}
           {errors.password && (
-            <div className="bg-red-600 w-full h-8 flex items-center">
-              <p className="bg-red-600 text-white ml-2">
+            <div className="bg-red-600 w-full h-auto flex items-center">
+              <p className="bg-red-600 text-white ml-2 mt-2 mb-2">
                 Contraseña requerida.
               </p>
             </div>
           )}
           {errors.confirmPassword?.message && (
-            <div className="bg-red-600 w-full h-8 flex items-center">
-              <p className="bg-red-600 text-white ml-2">
+            <div className="bg-red-600 w-full h-auto flex items-center">
+              <p className="bg-red-600 text-white ml-2 mt-2 mb-2">
                 {errors.confirmPassword.message}
               </p>
             </div>
