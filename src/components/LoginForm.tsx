@@ -2,24 +2,37 @@ import { useForm } from "react-hook-form";
 import { ILogin } from "../interfaces/auth.interface";
 import { useAuth } from "../context/auth.context";
 import { TbEye, TbEyeClosed } from "react-icons/tb";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-interface ILoginProps{
-  openRegister : () => void
+interface ILoginProps {
+  openRegister: () => void;
 }
 
 function LoginForm(props: ILoginProps) {
-  const { register, handleSubmit } = useForm<ILogin>();
-  const [showPassword, setShowPassword] = useState(false)
-  const {signin} = useAuth()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ILogin>();
+  const [showPassword, setShowPassword] = useState(false);
+  const { signin, error: loginErrors, cleanErrors } = useAuth();
 
   const onSubmit = handleSubmit((values) => {
-    signin(values)
+    signin(values);
   });
 
   const showPassw = () => {
-    setShowPassword(!showPassword)
-  }
+    setShowPassword(!showPassword);
+  };
+
+  useEffect(() => {
+    if (loginErrors.error.length > 0) {
+      const timer = setTimeout(() => {
+        cleanErrors();
+      }, 3500);
+      return () => clearTimeout(timer);
+    }
+  }, [loginErrors.error]);
 
   return (
     <div className="w-1/3 border-2 border-gray-300 rounded-sm drop-shadow-2xl bg-white p-6">
@@ -34,13 +47,43 @@ function LoginForm(props: ILoginProps) {
           {...register("email", { required: true })}
         />
         <div className="flex items-center">
-        <input
-          className="border w-full border-gray-400 rounded-sm p-2 font-sans"
-          type={showPassword ? "text" : "password"}
-          placeholder="Contraseña"
-          {...register("password", { required: true })}
-        />
-        <h1 onClick={() => showPassw()} className="absolute flex justify-center items-center rounded-full right-10 w-6 h-6 cursor-pointer hover:bg-slate-200">{showPassword === false ? <TbEyeClosed/> : <TbEye/>}</h1>
+          <input
+            className="border w-full border-gray-400 rounded-sm p-2 font-sans"
+            type={showPassword ? "text" : "password"}
+            placeholder="Contraseña"
+            {...register("password", { required: true })}
+          />
+          <h1
+            onClick={() => showPassw()}
+            className="absolute flex justify-center items-center rounded-full right-8 w-6 h-6 cursor-pointer hover:bg-slate-200"
+          >
+            {showPassword === false ? <TbEyeClosed /> : <TbEye />}
+          </h1>
+        </div>
+        <div>
+          <div
+            className={
+              loginErrors.error.length > 0
+                ? "bg-red-600 w-full h-8 flex items-center"
+                : "hidden"
+            }
+          >
+            <p className="bg-red-600 text-white ml-2">
+              {loginErrors.error.map((error) => error)}
+            </p>
+          </div>
+          {errors.email && (
+            <div className="bg-red-600 w-full h-8 flex items-center">
+              <p className="bg-red-600 text-white ml-2">Email requerido.</p>
+            </div>
+          )}
+          {errors.password && (
+            <div className="bg-red-600 w-full h-8 flex items-center">
+              <p className="bg-red-600 text-white ml-2">
+                Contraseña requerida.
+              </p>
+            </div>
+          )}
         </div>
         <button className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 border border-gray-400 rounded-sm shadow mt-2 mb-2 font-sans">
           Ingresar
