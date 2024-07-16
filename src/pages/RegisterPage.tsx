@@ -1,5 +1,6 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 interface IRegisterForm {
   name: string;
@@ -12,11 +13,17 @@ interface IRegisterForm {
 function RegisterPage() {
   const { register: registerForm, handleSubmit } = useForm<IRegisterForm>();
   const { register } = useAuth();
+  const navigate = useNavigate()
 
   const onSubmit: SubmitHandler<IRegisterForm> = async (formData) => {
     const { name, lastname, email, password } = formData;
     const username = `${name} ${lastname}`;
-    await register(username, email, password);
+    try {
+      await register(username, email, password);
+      navigate("/home")
+    } catch (error) {
+      console.error(error)
+    }
   };
 
   return (

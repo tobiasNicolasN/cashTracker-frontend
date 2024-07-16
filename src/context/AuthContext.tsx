@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import Cookies from "js-cookie";
-import { IAuthContext, IAuthProviderProps , IUser } from "../interface/auth";
+import { IAuthContext, IAuthProviderProps, IUser } from "../interface/auth";
 
 export const AuthContext = createContext<IAuthContext>({
   authenticated: false,
@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
       }
 
       setAuthenticated(true); // Autoriza al usuario
-      setUser(data);
+      setUser(data); // Guarda los datos del usuario
       console.log(data);
       return data;
     } catch (error) {
@@ -74,7 +74,8 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
         throw new Error(data.error); // Si la respuesta es negativa se fuerza un error
       }
 
-      setAuthenticated(true);
+      setAuthenticated(true); // Autoriza al usuario
+      setUser(data); // Guarda los datos del usuario
       console.log(data);
       return data;
     } catch (error) {
