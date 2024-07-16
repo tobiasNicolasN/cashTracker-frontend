@@ -18,7 +18,7 @@ export const useAuth = () => {
   return context;
 };
 
-const baseUrl = `${import.meta.env.VITE_BASE_URL!}/api/`;
+export const baseUrl = `${import.meta.env.VITE_BASE_URL!}/api/`;
 
 export const AuthProvider = ({ children }: IAuthProviderProps) => {
   const [authenticated, setAuthenticated] = useState(false);
@@ -35,6 +35,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           username,
           email,
@@ -63,6 +64,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           email,
           password,
@@ -87,6 +89,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     try {
       const res = await fetch(`${baseUrl}/logout`, {
         method: "POST",
+        credentials: "include",
       });
       Cookies.remove("token");
       const data = await res.json();
@@ -97,6 +100,22 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
       console.error(error);
     }
   };
+
+  // useEffect(() => {
+  //   const checkLogin = async () => {
+  //     const cookies = Cookies.get();
+
+  //     if (!cookies.token) {
+  //       setAuthenticated(false);
+  //       return;
+  //     }
+
+  //     // Si hay un token, podés agregar más lógica para verificarlo
+  //     setAuthenticated(true); // O la lógica necesaria para autenticar
+  //   };
+
+  //   checkLogin();
+  // }, []);
 
   return (
     <AuthContext.Provider

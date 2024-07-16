@@ -1,51 +1,20 @@
-import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function LandingPage() {
-  const { register, login, logout } = useAuth();
-
-  const handleRegister = async () => {
-    try {
-      await register("prueba6", "prueba6@gmail.com", "12345678");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleLogin = async () => {
-    try {
-      await login("prueba3@gmail.com", "12345678");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-3 p-2">
       <button
         className="text-xl bg-slate-700 w-28 rounded-lg p-2"
-        onClick={() => handleRegister()}
+        onClick={() => navigate("/register")}
       >
         register
       </button>
       <button
         className="text-xl bg-slate-700 w-28 rounded-lg p-2"
-        onClick={() => handleLogin()}
+        onClick={() => navigate("/login")}
       >
         login
-      </button>
-      <button
-        className="text-xl bg-slate-700 w-28 rounded-lg p-2"
-        onClick={() => handleLogout()}
-      >
-        logout
       </button>
     </div>
   );
