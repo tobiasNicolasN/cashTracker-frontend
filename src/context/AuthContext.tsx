@@ -1,27 +1,6 @@
-import { createContext, ReactNode, useContext, useState } from "react";
-
-interface IProps {
-  children?: ReactNode;
-}
-
-interface IAuthContext {
-  authenticated: boolean;
-  setAuthenticated: (newState: boolean) => void;
-  user: IUser | null;
-  setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
-  register: (username: string, email: string, password: string) => Promise<any>;
-  login: (email: string, password: string) => Promise<any>;
-  logout: () => Promise<void>;
-}
-
-interface IUser {
-  id: string;
-  username: string;
-  email: string;
-  password: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { createContext, useContext, useState } from "react";
+import Cookies from "js-cookie";
+import { IAuthContext, IAuthProviderProps , IUser } from "../interface/auth";
 
 export const AuthContext = createContext<IAuthContext>({
   authenticated: false,
@@ -41,7 +20,7 @@ export const useAuth = () => {
 
 const baseUrl = `${import.meta.env.VITE_BASE_URL!}/api/`;
 
-export const AuthProvider = ({ children }: IProps) => {
+export const AuthProvider = ({ children }: IAuthProviderProps) => {
   const [authenticated, setAuthenticated] = useState(false);
   const [user, setUser] = useState<IUser | null>(null);
 
@@ -105,18 +84,16 @@ export const AuthProvider = ({ children }: IProps) => {
 
   const logout = async () => {
     try {
-      const res = await fetch(`${baseUrl}logout`, {
+      const res = await fetch(`${baseUrl}/logout`, {
         method: "POST",
       });
+      Cookies.remove("token");
       const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data);
-      }
+      setUser(null);
       setAuthenticated(false);
-      console.log(data);
+      console.log(data.message);
     } catch (error) {
-      console.error("Fallo al deslogear: ", error);
+      console.error(error);
     }
   };
 

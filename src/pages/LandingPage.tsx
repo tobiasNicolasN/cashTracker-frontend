@@ -5,7 +5,7 @@ function LandingPage() {
 
   const handleRegister = async () => {
     try {
-      await register("prueba5", "prueba5@gmail.com", "12345678");
+      await register("prueba6", "prueba6@gmail.com", "12345678");
     } catch (error) {
       console.error(error);
     }
