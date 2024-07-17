@@ -20,27 +20,43 @@ function RegisterPage() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <input type="text" placeholder="Nombre" {...registerForm("name")} />
-        <input
-          type="text"
-          placeholder="Apellido"
-          {...registerForm("lastname")}
-        />
-      </div>
-      <input
-        type="text"
-        placeholder="Correo electrónico"
-        {...registerForm("email")}
-      />
-      <input
-        type="password"
-        placeholder="Contraseña"
-        {...registerForm("password")}
-      />
-      <button type="submit">Registrarse</button>
-    </form>
+    <div>
+      <form
+        className="flex flex-col gap-2 bg-gray-700 p-4"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div className="flex flex-col">
+          <div className="w-full">
+            <input
+              className="w-1/2 rounded-tl-md p-2 border-b-2 border-r-2"
+              type="text"
+              placeholder="Nombre"
+              {...registerForm("name")}
+            />
+            <input
+              className="w-1/2 rounded-tr-md p-2 border-b-2"
+              type="text"
+              placeholder="Apellido"
+              {...registerForm("lastname")}
+            />
+          </div>
+          <input
+            className="p-2 border-b-2"
+            type="text"
+            placeholder="Correo electrónico"
+            {...registerForm("email")}
+          />
+          <input
+            className="p-2 rounded-b-md"
+            type="password"
+            placeholder="Contraseña"
+            {...registerForm("password")}
+          />
+        </div>
+        <button className="bg-slate-500 rounded-md p-1" type="submit">Registrarse</button>
+        <button className="bg-slate-500" onClick={() => navigate("/login")}>Iniciar sesión</button>
+      </form>
+    </div>
   );
 }
 
